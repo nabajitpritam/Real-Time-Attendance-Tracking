@@ -6,7 +6,7 @@ import type { User, AttendanceSession } from '../App';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog';
 import { QrScanner } from './QrScanner';
 import { Badge } from './ui/badge';
-import { toast } from 'sonner@2.0.3';
+import { toast } from 'sonner';
 
 interface StudentDashboardProps {
   user: User;

@@ -1,14 +1,19 @@
 import { useState } from 'react';
+// Import React to access types like React.FormEvent
+import React from 'react'; 
+// Import local UI components
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
-import { QrCode, GraduationCap, UserCircle } from 'lucide-react';
+import { QrCode, GraduationCap, UserCircle } from 'lucide-react'; 
+// Ensure User type is imported from the parent file
 import type { User } from '../App';
 
 interface LoginPageProps {
-  onLogin: (user: User) => void;
+  // The User type is now correctly defined in App.tsx
+  onLogin: (user: User) => void; 
 }
 
 export function LoginPage({ onLogin }: LoginPageProps) {
@@ -16,7 +21,10 @@ export function LoginPage({ onLogin }: LoginPageProps) {
   const [teacherPassword, setTeacherPassword] = useState('');
   const [studentRoll, setStudentRoll] = useState('');
   const [studentPassword, setStudentPassword] = useState('');
+  const [adminUsername, setAdminUsername] = useState('');
+  const [adminPassword, setAdminPassword] = useState('');
 
+  // Explicitly type the event parameter 'e' as React.FormEvent
   const handleTeacherLogin = (e: React.FormEvent) => {
     e.preventDefault();
     // Mock authentication
@@ -30,6 +38,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
     }
   };
 
+  // Explicitly type the event parameter 'e' as React.FormEvent
   const handleStudentLogin = (e: React.FormEvent) => {
     e.preventDefault();
     // Mock authentication
@@ -39,6 +48,20 @@ export function LoginPage({ onLogin }: LoginPageProps) {
         name: 'Student ' + studentRoll,
         role: 'student',
         rollNumber: studentRoll,
+      });
+    }
+  };
+  
+  // Explicitly type the event parameter 'e' as React.FormEvent
+  const handleAdminLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Mock Admin credentials for demo
+    if (adminUsername === 'admin' && adminPassword === 'admin') {
+      onLogin({
+        id: 'admin_001',
+        name: 'System Admin',
+        role: 'admin',
+        email: 'admin@sams.com',
       });
     }
   };
@@ -107,11 +130,16 @@ export function LoginPage({ onLogin }: LoginPageProps) {
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="student" className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="student">Student</TabsTrigger>
-                <TabsTrigger value="teacher">Teacher</TabsTrigger>
-              </TabsList>
+              {/* TabsList updated to include Admin */}
+              <TabsList className="flex w-full rounded-lg bg-muted p-1">
+  <TabsTrigger value="student" className="w-full">Student</TabsTrigger>
+  <TabsTrigger value="teacher" className="w-full">Teacher</TabsTrigger>
+  <TabsTrigger value="admin" className="w-full">Admin</TabsTrigger>
+</TabsList>
+
+
               
+              {/* Student Login Content */}
               <TabsContent value="student">
                 <form onSubmit={handleStudentLogin} className="space-y-4">
                   <div className="space-y-2">
@@ -144,6 +172,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                 </form>
               </TabsContent>
               
+              {/* Teacher Login Content */}
               <TabsContent value="teacher">
                 <form onSubmit={handleTeacherLogin} className="space-y-4">
                   <div className="space-y-2">
@@ -176,6 +205,42 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                   </p>
                 </form>
               </TabsContent>
+              
+              {/* New Admin Login Content */}
+              <TabsContent value="admin">
+  <form onSubmit={handleAdminLogin} className="space-y-4">
+    <div className="space-y-2">
+      <Label htmlFor="admin-username">Admin Username</Label>
+      <Input
+        id="admin-username"
+        placeholder="Enter admin username"
+        value={adminUsername}
+        onChange={(e) => setAdminUsername(e.target.value)}
+        required
+      />
+    </div>
+
+    <div className="space-y-2">
+      <Label htmlFor="admin-password">Password</Label>
+      <Input
+        id="admin-password"
+        type="password"
+        placeholder="Enter admin password"
+        value={adminPassword}
+        onChange={(e) => setAdminPassword(e.target.value)}
+        required
+      />
+    </div>
+
+    <Button type="submit" className="w-full">
+      Login as Admin
+    </Button>
+
+    <p className="text-center text-gray-500">
+      Demo: username <b>admin</b>, password <b>admin</b>
+    </p>
+  </form>
+</TabsContent>
             </Tabs>
           </CardContent>
         </Card>

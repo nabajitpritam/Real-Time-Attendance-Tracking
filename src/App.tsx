@@ -2,11 +2,14 @@ import { useState, useEffect } from "react";
 import { LoginPage } from "./components/LoginPage";
 import { TeacherDashboard } from "./components/TeacherDashboard";
 import { StudentDashboard } from "./components/StudentDashboard";
+// Import the new Admin Dashboard component
+import AdminDashboard from "./components/AdminDashboard";
 
+// --- UPDATED INTERFACE: Added "admin" role ---
 export interface User {
   id: string;
   name: string;
-  role: "teacher" | "student";
+  role: "teacher" | "student" | "admin"; // Admin role added here
   email?: string;
   rollNumber?: string;
 }
@@ -64,12 +67,15 @@ function App() {
     return <LoginPage onLogin={handleLogin} />;
   }
 
+  // --- UPDATED RENDERING LOGIC ---
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      {user.role === "teacher" ? (
-        <TeacherDashboard user={user} onLogout={handleLogout} />
+      {user.role === "admin" ? (
+        <AdminDashboard user={user} onLogout={handleLogout} /> // Render Admin Dashboard
+      ) : user.role === "teacher" ? (
+        <TeacherDashboard user={user} onLogout={handleLogout} /> // Render Teacher Dashboard
       ) : (
-        <StudentDashboard user={user} onLogout={handleLogout} />
+        <StudentDashboard user={user} onLogout={handleLogout} /> // Render Student Dashboard (default)
       )}
     </div>
   );
